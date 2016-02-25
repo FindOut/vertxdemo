@@ -26,7 +26,8 @@ The projects show how to:
   * Have a database service accessible from the other services, but using Vert.x proxy class technology.
   * Inject external properties in a Docker container to expose them as system properties.
   * Access injected Docker properties from the database service.
-  * User for both `Dockerfile` and Maven for starting Docker containers.
+  * Use both `Dockerfile` and Maven for starting Docker containers.
+  * Use `docker-compose` to start all services as well as the needed database.
   
 All modules will be packaged as fat jars and are runnable as such, but it's recommended to setup and use Docker  
   
@@ -64,4 +65,5 @@ image with `mvn docker:push`.
 
 ### Docker Compose
   * A simple docker-compose setup exists in the project root. While standing in root, calling `docker-compose up` will start
-  all modules, using the `Dockerfile` files as settings.
+  all modules, as well as the database, using the `Dockerfile` files as settings. `docker-compose down` stops and removes all containers.
+  * If you want to repackage everything: `mvn clean install package` followed by `docker-compose build`.

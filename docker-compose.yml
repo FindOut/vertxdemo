@@ -1,17 +1,33 @@
-frontend-js:
-  build: ./frontend-js
-  ports:
-     - "8080:8080"
-  #links:
-    #- news-server-groovy:news-server-groovy
-    #- news-server-java:news-server-java
-    #- news-server-js:news-server-js
-    #- news-server-rb:news-server-rb
-news-server-groovy:
-  build: ./news-server-groovy
-news-server-java:
-  build: ./news-server-java
-news-server-js:
-  build: ./news-server-js
-news-server-rb:
-  build: ./news-server-rb
+version: '2'
+services:
+  frontend-js:
+    build: ./frontend-js
+    ports:
+      - "8080:8080"
+  db-service-java:
+    build: ./db-service-java
+    depends_on:
+        - vertxdemo-mysql
+    links:
+        - vertxdemo-mysql:db
+    env_file: ./db-service-java/dev.env.properties
+    environment:
+        - DB_PORT=tcp://db:3306
+  vertxdemo-mysql:
+    build: ./database
+    ports:
+          - "3306:3306"
+    expose:
+          - 3306
+    volumes:
+     - ./database/data:/var/lib/mysql
+  news-server-groovy:
+    build: ./news-server-groovy
+  news-server-java:
+    build: ./news-server-java
+    depends_on:
+        - db-service-java
+  news-server-js:
+    build: ./news-server-js
+  news-server-rb:
+    build: ./news-server-rb
